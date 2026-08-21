@@ -17,15 +17,21 @@ wx.cloud.init({ env: wx.cloud.DYNAMIC_CURRENT_ENV, traceUser: true })
 
 ## 2. 创建数据库集合
 
-在云开发控制台创建以下集合：
+集合清单已改为 JSON，完整文件位于 [`database.collections.json`](../database.collections.json)：
 
-| 集合 | 用途 |
-| --- | --- |
-| `users` | 用户昵称、偏好、当前房间 |
-| `rooms` | 邀请码、两位成员、上次拍板人 |
-| `favorites` | 情侣共同收藏 |
-| `spins` | 每次转盘候选与云端结果 |
-| `records` | 已确认的投喂日记 |
+```json
+{
+  "collections": [
+    { "name": "users", "description": "用户昵称、偏好、当前房间", "indexes": [] },
+    { "name": "rooms", "description": "邀请码、两位成员、上次拍板人", "indexes": [] },
+    { "name": "favorites", "description": "情侣共同收藏", "indexes": [] },
+    { "name": "spins", "description": "每次转盘候选与云端结果", "indexes": [] },
+    { "name": "records", "description": "已确认的投喂日记", "indexes": [] }
+  ]
+}
+```
+
+> 注意：微信云数据库控制台的「导入」功能导入的是**集合内的数据记录**，不能用一个 JSON 文件批量创建多个空集合。请先按该清单创建 5 个集合；本项目没有需要预先导入的业务数据，用户、房间、收藏、转盘和日记会由云函数自动写入。
 
 将数据库安全规则设为：
 
