@@ -17,23 +17,37 @@ wx.cloud.init({ env: wx.cloud.DYNAMIC_CURRENT_ENV, traceUser: true })
 
 ## 2. 创建数据库集合
 
-集合清单已改为 JSON，完整文件位于 [`database.collections.json`](../database.collections.json)：
+微信云数据库是**无模式 JSON 数据库**，不需要提前填写字段，也不需要导入示例记录。请在「云开发控制台 → 数据库」中点击左侧的 `+`，依次创建以下 5 个**空集合**：
 
 ```json
 {
-  "collections": [
-    { "name": "users", "description": "用户昵称、偏好、当前房间", "indexes": [] },
-    { "name": "rooms", "description": "邀请码、两位成员、上次拍板人", "indexes": [] },
-    { "name": "favorites", "description": "情侣共同收藏", "indexes": [] },
-    { "name": "spins", "description": "每次转盘候选与云端结果", "indexes": [] },
-    { "name": "records", "description": "已确认的投喂日记", "indexes": [] }
-  ]
+  "collections": ["users", "rooms", "favorites", "spins", "records"]
 }
 ```
 
-> 注意：微信云数据库控制台的「导入」功能导入的是**集合内的数据记录**，不能用一个 JSON 文件批量创建多个空集合。请先按该清单创建 5 个集合；本项目没有需要预先导入的业务数据，用户、房间、收藏、转盘和日记会由云函数自动写入。
+每次创建集合时只填写一个集合名称：
 
-将数据库安全规则设为：
+1. `users`
+2. `rooms`
+3. `favorites`
+4. `spins`
+5. `records`
+
+不要点击集合内的「导入」按钮，也不要手动添加字段或占位记录。数据会在实际操作时自动产生：
+
+- 第一次打开小程序：`auth` 云函数写入 `users`
+- 创建或加入房间：`room` 云函数写入 `rooms`
+- 新增共同收藏：`favorites` 云函数写入 `favorites`
+- 点击转盘：`spin` 云函数写入 `spins`
+- 确认翻牌或直接点菜：写入 `records`
+
+内置的 24 道菜位于小程序本地的 `miniprogram/data/catalog.js`，无需导入数据库。
+
+完整集合及索引清单位于 [`database.collections.json`](../database.collections.json)，该文件是部署配置说明，**不是云数据库记录导入文件**。微信控制台的 JSON「导入」功能只能向已经创建的单个集合导入数据，不能批量创建集合。
+
+### 设置集合权限
+
+为上述 5 个集合分别选择「所有用户不可读写」，或把安全规则设置为：
 
 ```json
 {
