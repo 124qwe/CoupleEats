@@ -1,0 +1,92 @@
+<view class="page">
+  <view class="container">
+    <view class="profile-head">
+      <button class="avatar-button" bindtap="openProfileEditor">
+        <image wx:if="{{user.avatarUrl}}" class="avatar-image" src="{{user.avatarUrl}}" mode="aspectFill" />
+        <view wx:else class="avatar-fallback">{{initial}}</view>
+        <view class="edit-dot">✎</view>
+      </button>
+      <view class="profile-copy">
+        <view class="profile-name">{{user.nickname || '小饭鸭'}}</view>
+        <view class="profile-sub">{{room && room.status === 'active' ? '已和饭搭子绑定' : '等待你的饭搭子'}}</view>
+      </view>
+      <view class="duck-sticker">🦆</view>
+    </view>
+
+    <view wx:if="{{room}}" class="relationship-card card">
+      <view class="relationship-top">
+        <view>
+          <view class="tiny-label">OUR TABLE</view>
+          <view class="section-title">我们的饭桌</view>
+        </view>
+        <view class="status-pill">{{room.status === 'active' ? '● 已连接' : '○ 等待加入'}}</view>
+      </view>
+      <view class="people-row">
+        <view class="person">
+          <view class="person-avatar me">{{initial}}</view>
+          <view>{{user.nickname || '我'}}</view>
+        </view>
+        <view class="heart-link"><text>♡</text><view></view><text>♡</text></view>
+        <view class="person">
+          <view class="person-avatar partner">{{partnerInitial}}</view>
+          <view>{{partnerName}}</view>
+        </view>
+      </view>
+      <view class="room-info">
+        <view>
+          <view class="info-label">房间邀请码</view>
+          <view class="room-code">{{room.inviteCode}}</view>
+        </view>
+        <button bindtap="copyCode">复制</button>
+      </view>
+      <view class="turn-info">{{turnText}}</view>
+    </view>
+
+    <view wx:else class="relationship-card card unbound">
+      <view class="unbound-icon">💌</view>
+      <view class="section-title">邀请 TA 来同一张饭桌</view>
+      <view class="subtitle">绑定后，共享收藏、转盘结果与每一餐记录</view>
+      <button class="primary-btn" bindtap="goBind">去心意绑定</button>
+    </view>
+
+    <view class="preference-card card">
+      <view class="section-head">
+        <view>
+          <view class="section-title">我的口味</view>
+          <view class="subtitle">选中的偏好会帮你们更快挑候选</view>
+        </view>
+        <view wx:if="{{savingPrefs}}" class="saving">保存中…</view>
+      </view>
+      <view class="preference-list">
+        <view wx:for="{{preferenceOptions}}" wx:key="id" class="preference-chip {{item.selected ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="togglePreference">{{item.emoji}} {{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="menu-card card">
+      <view class="menu-item" bindtap="goHistory">
+        <view class="menu-icon pink">📖</view><view class="menu-copy"><view>投喂日记</view><text>今天 / 本周吃了什么</text></view><view class="chevron">›</view>
+      </view>
+      <view class="menu-line"></view>
+      <view class="menu-item" bindtap="goPool">
+        <view class="menu-icon yellow">💗</view><view class="menu-copy"><view>我们的收藏</view><text>管理爱吃的店和菜</text></view><view class="chevron">›</view>
+      </view>
+      <view class="menu-line"></view>
+      <button class="menu-item feedback" open-type="feedback">
+        <view class="menu-icon blue">💬</view><view class="menu-copy"><view>意见反馈</view><text>有想法就告诉我们</text></view><view class="chevron">›</view>
+      </button>
+    </view>
+
+    <button wx:if="{{room}}" class="unbind-button" bindtap="unbind">解除关系</button>
+    <view class="version">今天吃啥鸭 · v1.0.0</view>
+  </view>
+
+  <view wx:if="{{showProfileEditor}}" class="modal-mask" catchtouchmove="noop" bindtap="closeProfileEditor">
+    <view class="editor" catchtap="noop">
+      <view class="editor-title">怎么称呼你？</view>
+      <view class="editor-avatar">{{editInitial}}</view>
+      <input class="nickname-input" type="nickname" maxlength="12" value="{{editNickname}}" placeholder="输入昵称" bindinput="onNicknameInput" />
+      <button class="primary-btn" loading="{{savingProfile}}" disabled="{{!editNickname || savingProfile}}" bindtap="saveProfile">保存</button>
+      <button class="cancel-editor" bindtap="closeProfileEditor">取消</button>
+    </view>
+  </view>
+</view>

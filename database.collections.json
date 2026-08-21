@@ -1,0 +1,12 @@
+{
+  "collections": [
+    { "name": "users", "indexes": [] },
+    { "name": "rooms", "indexes": [{ "name": "inviteCode_unique", "unique": true, "fields": [{ "name": "inviteCode", "direction": "asc" }] }] },
+    { "name": "favorites", "indexes": [{ "name": "room_created", "unique": false, "fields": [{ "name": "roomId", "direction": "asc" }, { "name": "createdAt", "direction": "desc" }] }] },
+    { "name": "spins", "indexes": [{ "name": "room_created", "unique": false, "fields": [{ "name": "roomId", "direction": "asc" }, { "name": "createdAt", "direction": "desc" }] }] },
+    { "name": "records", "indexes": [
+      { "name": "room_eaten", "unique": false, "fields": [{ "name": "roomId", "direction": "asc" }, { "name": "eatenAt", "direction": "desc" }] },
+      { "name": "room_decision", "unique": false, "fields": [{ "name": "roomId", "direction": "asc" }, { "name": "decisionType", "direction": "asc" }] }
+    ] }
+  ]
+}
