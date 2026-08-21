@@ -62,6 +62,15 @@ App({
 
   showError(err, fallback = '操作失败，请稍后重试') {
     console.error(err)
-    wx.showToast({ title: (err && err.message) || fallback, icon: 'none', duration: 2200 })
+    const raw = `${err && (err.message || err.errMsg) || ''}`
+    let title = raw || fallback
+    if (raw.includes('FUNCTION_NOT_FOUND') || raw.includes('-501000')) {
+      title = '云函数未部署，请先在开发者工具上传全部云函数'
+    } else if (raw.includes('ENV_NOT_FOUND') || raw.includes('INVALID_ENV')) {
+      title = '未找到云环境，请检查开发者工具中的云环境选择'
+    } else if (raw.includes('COLLECTION_NOT_EXIST')) {
+      title = '数据库集合未创建，请先完成数据库配置'
+    }
+    wx.showToast({ title, icon: 'none', duration: 2600 })
   }
 })
