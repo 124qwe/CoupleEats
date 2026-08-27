@@ -1,0 +1,101 @@
+<view class="page">
+  <view class="pool-header">
+    <view class="brand-row">
+      <view>
+        <view class="title">{{mode === 'cook' ? '今天来做什么？' : '今天想吃什么？'}}</view>
+        <view class="subtitle">点几样放进转盘，也可以直接翻牌</view>
+      </view>
+      <button class="add-favorite" bindtap="openCreate">＋ 收藏</button>
+    </view>
+    <view class="search-box">
+      <text>⌕</text>
+      <input value="{{keyword}}" placeholder="搜菜名、口味或收藏" placeholder-class="search-placeholder" bindinput="onSearch" />
+      <text wx:if="{{keyword}}" class="clear" bindtap="clearSearch">×</text>
+    </view>
+  </view>
+
+  <scroll-view class="category-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="category-row">
+      <view wx:for="{{categories}}" wx:key="id" class="category-item {{activeCategory === item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="selectCategory">
+        <view class="category-emoji">{{item.emoji}}</view>
+        <view>{{item.name}}</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="content">
+    <view class="menu-head">
+      <view class="section-title">🥢 今日菜单</view>
+      <view class="menu-count">{{filteredFoods.length}} 道</view>
+    </view>
+
+    <view wx:if="{{filteredFoods.length}}" class="food-grid">
+      <view wx:for="{{filteredFoods}}" wx:key="id" class="food-card {{item.selected ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="toggleFood">
+        <view class="food-visual" style="background: {{item.color}}">
+          <view class="food-emoji">{{item.emoji}}</view>
+          <view wx:if="{{item.isFavorite}}" class="favorite-label">♡ 我们的收藏</view>
+          <view wx:else class="favorite-label builtin">{{item.categoryName}}</view>
+          <view class="select-mark">{{item.selected ? '✓' : '+'}}</view>
+        </view>
+        <view class="food-copy">
+          <view class="food-name-row">
+            <view class="food-name">{{item.name}}</view>
+            <view class="heart">{{item.isFavorite ? '♥' : '♡'}}</view>
+          </view>
+          <view class="food-desc">{{item.desc || '今天就吃这道吧'}}</view>
+          <view class="tag-row">
+            <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="food-tag">{{tag}}</text>
+          </view>
+          <view class="food-actions">
+            <button class="eat-now" catchtap="eatNow" data-id="{{item.id}}">就吃它</button>
+            <block wx:if="{{item.isFavorite}}">
+              <button class="mini-action" catchtap="openEdit" data-id="{{item.id}}">编辑</button>
+              <button class="mini-action delete" catchtap="removeFavorite" data-id="{{item.id}}">删除</button>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty">
+      <text class="empty-emoji">🥣</text>
+      <view>还没有找到合口味的</view>
+      <view class="subtitle">换个分类，或添加你们爱吃的地方吧</view>
+    </view>
+  </view>
+
+  <view wx:if="{{selectedCount > 0}}" class="selection-bar safe-bottom">
+    <view class="selection-info">
+      <view><text class="selected-number">{{selectedCount}}</text> / 10 道</view>
+      <view class="selection-tip">{{selectedCount < 2 ? '至少再选一道' : '候选已准备好'}}</view>
+    </view>
+    <button class="clear-selected" bindtap="clearSelected">清空</button>
+    <button class="wheel-button" disabled="{{selectedCount < 2}}" bindtap="goWheel">去转一下 →</button>
+  </view>
+
+  <view wx:if="{{showEditor}}" class="modal-mask" catchtouchmove="noop" bindtap="closeEditor">
+    <view class="editor card" catchtap="noop">
+      <view class="editor-head">
+        <view class="section-title">{{editingId ? '编辑收藏' : '收藏爱吃的地方'}}</view>
+        <view class="editor-close" bindtap="closeEditor">×</view>
+      </view>
+      <view class="form-label">名字</view>
+      <input class="form-input" maxlength="18" value="{{form.name}}" placeholder="例如：巷口那家麻辣烫" bindinput="onNameInput" />
+      <view class="form-row">
+        <view class="form-half emoji-half">
+          <view class="form-label">图标</view>
+          <input class="form-input" maxlength="2" value="{{form.emoji}}" placeholder="🍽️" bindinput="onEmojiInput" />
+        </view>
+        <view class="form-half">
+          <view class="form-label">分类</view>
+          <picker range="{{editableCategories}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+            <view class="form-input picker-value">{{editableCategories[categoryIndex].emoji}} {{editableCategories[categoryIndex].name}}⌄</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-label">备注</view>
+      <input class="form-input" maxlength="36" value="{{form.desc}}" placeholder="地址、招牌菜，或你们的小暗号" bindinput="onDescInput" />
+      <button class="primary-btn save" loading="{{saving}}" disabled="{{!form.name || saving}}" bindtap="saveFavorite">保存到我们的收藏</button>
+    </view>
+  </view>
+</view>

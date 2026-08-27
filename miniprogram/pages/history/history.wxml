@@ -1,0 +1,59 @@
+<view class="page">
+  <view class="container">
+    <view class="history-hero card">
+      <view>
+        <view class="tiny-label">♡ 我们的投喂日记</view>
+        <view class="title">每一餐，都有答案</view>
+        <view class="subtitle">今天和 TA 也有好好吃饭</view>
+      </view>
+      <view class="hero-ducks">🦆<text>♥</text>🦆</view>
+    </view>
+
+    <view class="stats-row">
+      <view class="stat-item">
+        <view class="stat-num">{{stats.weekCount}}</view>
+        <view class="stat-label">本周吃了</view>
+      </view>
+      <view class="stat-item pink">
+        <view class="stat-num">{{stats.totalCount}}</view>
+        <view class="stat-label">累计翻牌</view>
+      </view>
+      <view class="stat-item yellow">
+        <view class="stat-num">{{stats.spinCount}}</view>
+        <view class="stat-label">转盘决定</view>
+      </view>
+    </view>
+
+    <view class="range-tabs">
+      <view wx:for="{{ranges}}" wx:key="id" class="range-tab {{range === item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="changeRange">{{item.name}}</view>
+    </view>
+
+    <block wx:if="{{groups.length}}">
+      <view wx:for="{{groups}}" wx:key="date" class="day-group">
+        <view class="day-title">
+          <view>{{item.title}}</view>
+          <view class="day-line"></view>
+          <view class="day-count">{{item.records.length}} 餐</view>
+        </view>
+        <view wx:for="{{item.records}}" wx:for-item="record" wx:key="_id" class="record-card card">
+          <view class="record-emoji" style="background: {{record.food.color || '#fff0bd'}}">{{record.food.emoji || '🍽️'}}</view>
+          <view class="record-main">
+            <view class="record-name">{{record.food.name}}</view>
+            <view class="record-meta">{{record.timeText}} · {{record.decisionText}}</view>
+            <view class="decider">{{record.deciderText}}</view>
+          </view>
+          <view class="record-type {{record.decisionType}}">{{record.decisionType === 'spin' ? '转盘' : '点菜'}}</view>
+        </view>
+      </view>
+    </block>
+
+    <view wx:elif="{{!loading}}" class="empty card">
+      <text class="empty-emoji">📖</text>
+      <view class="section-title">这一页还空着</view>
+      <view class="subtitle">决定好今天吃什么，就会记在这里</view>
+      <button class="secondary-btn" bindtap="goPool">去选今天这餐</button>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">正在翻开日记…</view>
+  </view>
+</view>

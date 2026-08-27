@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/bind/bind",
+    "pages/pool/pool",
+    "pages/wheel/wheel",
+    "pages/history/history",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#edf5ff",
+    "navigationBarTitleText": "今天吃啥鸭",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#edf5ff"
+  },
+  "tabBar": {
+    "color": "#8a8fa3",
+    "selectedColor": "#e59935",
+    "backgroundColor": "#fffef9",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "今日",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/pool/pool",
+        "text": "候选池",
+        "iconPath": "assets/icons/pool.png",
+        "selectedIconPath": "assets/icons/pool-active.png"
+      },
+      {
+        "pagePath": "pages/wheel/wheel",
+        "text": "转盘",
+        "iconPath": "assets/icons/wheel.png",
+        "selectedIconPath": "assets/icons/wheel-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

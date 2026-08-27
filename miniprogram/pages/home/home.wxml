@@ -1,0 +1,82 @@
+<view class="page">
+  <view class="container">
+    <view class="journal-pill">♡ {{coupleTitle}} ♡</view>
+    <image class="hero" src="/assets/images/kitchen-banner.jpg" mode="aspectFill" />
+
+    <view class="welcome-row">
+      <view>
+        <view class="title">今天想被怎么投喂？</view>
+        <view class="subtitle">选好身份，把这一餐好好交给 TA</view>
+      </view>
+      <view class="tiny-duck">🦆</view>
+    </view>
+
+    <view wx:if="{{!loading && !room}}" class="bind-card card">
+      <view class="bind-icon">💞</view>
+      <view class="bind-copy">
+        <view class="section-title">先找到你的饭搭子</view>
+        <view class="subtitle">生成邀请码，或输入 TA 发来的 6 位码</view>
+      </view>
+      <button class="bind-button" bindtap="goBind">心意绑定</button>
+    </view>
+
+    <view wx:elif="{{room && room.status === 'waiting'}}" class="waiting-card card">
+      <view class="waiting-top">
+        <view>
+          <view class="section-title">正在等 TA 来 🫶</view>
+          <view class="subtitle">把邀请码分享给你的饭搭子</view>
+        </view>
+        <button class="text-button" bindtap="goBind">查看</button>
+      </view>
+      <view class="invite-code" bindtap="copyCode">{{room.inviteCode}}</view>
+    </view>
+
+    <view class="choice-list">
+      <button class="choice-card eat" bindtap="chooseMode" data-mode="eat">
+        <view class="choice-copy">
+          <view class="choice-title">我想吃</view>
+          <view class="choice-subtitle">看图点菜，把想吃的告诉 TA</view>
+        </view>
+        <view class="choice-emoji">🍜</view>
+      </button>
+      <button class="choice-card cook" bindtap="chooseMode" data-mode="cook">
+        <view class="choice-copy">
+          <view class="choice-title">我来做</view>
+          <view class="choice-subtitle">把这一餐认真做好，等你开饭</view>
+        </view>
+        <view class="choice-emoji">🍳</view>
+      </button>
+    </view>
+
+    <view class="decision-card card" bindtap="goWheel">
+      <view class="decision-head">
+        <view>
+          <view class="eyebrow">今晚不纠结</view>
+          <view class="decision-title">把答案交给幸运转盘</view>
+        </view>
+        <view class="arrow">→</view>
+      </view>
+      <view class="decision-bottom">
+        <view class="turn-badge">{{turnText}}</view>
+        <view class="candidate-count">已放入 {{candidateCount}} 道候选</view>
+      </view>
+    </view>
+
+    <view wx:if="{{latest.length}}" class="recent-section">
+      <view class="section-head">
+        <view class="section-title">最近翻牌</view>
+        <view class="link" bindtap="goHistory">全部记录 →</view>
+      </view>
+      <view class="recent-row">
+        <view wx:for="{{latest}}" wx:key="_id" class="recent-item">
+          <view class="recent-emoji" style="background: {{item.food.color || '#fff0ca'}}">{{item.food.emoji || '🍽️'}}</view>
+          <view class="recent-name">{{item.food.name}}</view>
+          <view class="recent-date">{{item.dateText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <image class="picnic" src="/assets/images/couple-banner.jpg" mode="aspectFill" />
+    <view class="footer-copy">认真吃饭，也认真喜欢你</view>
+  </view>
+</view>

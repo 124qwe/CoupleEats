@@ -1,0 +1,73 @@
+<view class="page">
+  <view class="container">
+    <view class="wheel-header">
+      <view class="tiny-label">✦ 今晚不纠结 ✦</view>
+      <view class="title">转到什么就吃什么</view>
+      <view class="turn-pill">{{turnText}}</view>
+    </view>
+
+    <view wx:if="{{candidates.length >= 2}}" class="wheel-stage">
+      <view class="pointer"><view class="pointer-dot">♥</view></view>
+      <view class="wheel-shadow"></view>
+      <canvas id="wheelCanvas" type="2d" class="wheel-canvas"></canvas>
+      <view class="wheel-center">
+        <view class="center-duck">🦆</view>
+        <view class="center-text">吃啥鸭</view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-wheel card">
+      <view class="empty-plate">🍽️</view>
+      <view class="section-title">转盘还空着呢</view>
+      <view class="subtitle">先从候选池选至少两样想吃的</view>
+      <view class="empty-actions">
+        <button class="secondary-btn" bindtap="goPool">去挑几样</button>
+        <button wx:if="{{room && room.status === 'active'}}" class="sync-empty" bindtap="syncLatest">同步 TA 的云端结果</button>
+      </view>
+    </view>
+
+    <block wx:if="{{candidates.length >= 2}}">
+      <button class="spin-button {{spinning ? 'spinning' : ''}}" disabled="{{spinning}}" bindtap="spin">
+        <text class="spin-icon">{{spinning ? '…' : '↻'}}</text>
+        <text>{{spinning ? '命运正在选择' : '转一下'}}</text>
+      </button>
+      <view class="under-actions">
+        <button bindtap="changeBatch">🔀 换一批</button>
+        <view class="divider"></view>
+        <button bindtap="goPool">✎ 调整候选</button>
+        <view class="divider"></view>
+        <button bindtap="syncLatest">☁ 同步结果</button>
+      </view>
+
+      <view class="candidate-card card">
+        <view class="candidate-head">
+          <view class="section-title">本轮候选</view>
+          <view class="candidate-num">{{candidates.length}} 道</view>
+        </view>
+        <view class="candidate-chips">
+          <view wx:for="{{candidates}}" wx:key="id" class="candidate-chip">
+            <text>{{item.emoji}}</text> {{item.name}}
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="rule-copy">随机结果由云端生成并保存，你和 TA 看到的是同一个答案</view>
+  </view>
+
+  <view wx:if="{{showResult}}" class="result-mask" catchtouchmove="noop">
+    <view class="confetti one">✦</view><view class="confetti two">♥</view><view class="confetti three">✦</view>
+    <view class="result-sheet">
+      <view class="result-tag">{{syncedResult ? 'TA 刚刚转到了' : '今日幸运翻牌'}}</view>
+      <view class="result-emoji" style="background: {{result.color || '#fff0bd'}}">{{result.emoji || '🍽️'}}</view>
+      <view class="result-small">那今天就去吃</view>
+      <view class="result-name">{{result.name}}</view>
+      <view class="result-love">和喜欢的人，好好吃这一餐 ♡</view>
+      <button class="confirm-food" loading="{{confirming}}" disabled="{{confirming}}" bindtap="confirmResult">{{resultConfirmed ? '这个答案已经确认啦' : '确认今天吃它'}}</button>
+      <view class="result-links">
+        <button bindtap="closeResult">再想想</button>
+        <button bindtap="retry">换一批再抽</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,25 @@
+{
+  "description": "今天吃啥鸭 - 情侣吃饭决策微信小程序",
+  "packOptions": { "ignore": ["docs/**", "screenshots/**"] },
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "showShadowRootInWxmlPanel": true,
+    "useCompilerPlugins": false,
+    "ignoreUploadUnusedFiles": true,
+    "compileHotReLoad": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.7.12",
+  "appid": "touristappid",
+  "projectname": "CoupleEats",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "cloudbaseRoot": "cloudfunctions/",
+  "simulatorType": "wechat",
+  "condition": {}
+}

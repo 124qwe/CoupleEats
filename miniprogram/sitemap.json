@@ -1,0 +1,4 @@
+{
+  "desc": "今天吃啥鸭页面索引",
+  "rules": [{ "action": "allow", "page": "*" }]
+}

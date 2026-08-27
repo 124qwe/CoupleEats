@@ -1,0 +1,54 @@
+<view class="page">
+  <view class="container">
+    <image class="couple-banner" src="/assets/images/couple-banner.jpg" mode="aspectFill" />
+    <view class="heart-seal">♡</view>
+
+    <block wx:if="{{room && room.status === 'active'}}">
+      <view class="title centered">已经牵手成功啦</view>
+      <view class="subtitle centered">从今天起，一起认真决定每一餐</view>
+      <view class="bound-card card">
+        <view class="avatar">{{meInitial}}</view>
+        <view class="love-line">♡────♡</view>
+        <view class="avatar partner">{{partnerInitial}}</view>
+        <view class="member-name">{{meName}}</view>
+        <view></view>
+        <view class="member-name">{{partnerName}}</view>
+      </view>
+      <button class="primary-btn" bindtap="backHome">去决定今天吃什么</button>
+    </block>
+
+    <block wx:else>
+      <view class="title centered">{{mode === 'join' ? '输入 TA 的邀请码' : '邀请 TA 成为饭搭子'}}</view>
+      <view class="subtitle centered">{{mode === 'join' ? '输入对方分享给你的 6 位邀请码' : '把专属邀请码发给 TA，一起开启投喂日记'}}</view>
+
+      <view class="mode-tabs">
+        <view class="mode-tab {{mode === 'create' ? 'active' : ''}}" data-mode="create" bindtap="switchMode">我来邀请</view>
+        <view class="mode-tab {{mode === 'join' ? 'active' : ''}}" data-mode="join" bindtap="switchMode">我有邀请码</view>
+      </view>
+
+      <view wx:if="{{mode === 'create'}}" class="code-card card">
+        <view wx:if="{{room && room.status === 'waiting'}}">
+          <view class="field-label">我们的专属邀请码</view>
+          <view class="big-code" bindtap="copyCode">{{room.inviteCode}}</view>
+          <view class="code-tip">轻点复制 · 邀请码 24 小时内有效</view>
+          <button class="share-btn" open-type="share">发给 TA</button>
+          <button class="refresh-btn" bindtap="refreshRoom">TA 已加入？刷新看看</button>
+        </view>
+        <view wx:else class="generate-wrap">
+          <view class="generate-emoji">💌</view>
+          <view class="field-label">生成只属于你们的暗号</view>
+          <button class="primary-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="createRoom">生成邀请码</button>
+        </view>
+      </view>
+
+      <view wx:else class="join-card card">
+        <view class="field-label">TA 的邀请码</view>
+        <input class="code-input" type="number" maxlength="6" value="{{inviteCode}}" placeholder="请输入 6 位邀请码" placeholder-class="input-placeholder" bindinput="onCodeInput" />
+        <view class="mini-hint">邀请码不分空格，输入后将进入同一间房</view>
+      </view>
+
+      <button wx:if="{{mode === 'join'}}" class="primary-btn confirm" loading="{{submitting}}" disabled="{{inviteCode.length !== 6 || submitting}}" bindtap="joinRoom">确认绑定</button>
+      <view class="privacy-tip">完成绑定后，只有你们两个人能看到共同候选与记录</view>
+    </block>
+  </view>
+</view>

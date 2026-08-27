@@ -1,0 +1,99 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "description": "用户昵称、偏好、当前房间",
+      "indexes": []
+    },
+    {
+      "name": "rooms",
+      "description": "邀请码、两位成员、上次拍板人",
+      "indexes": [
+        {
+          "name": "inviteCode_unique",
+          "unique": true,
+          "fields": [
+            {
+              "name": "inviteCode",
+              "direction": "asc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "favorites",
+      "description": "情侣共同收藏",
+      "indexes": [
+        {
+          "name": "room_created",
+          "unique": false,
+          "fields": [
+            {
+              "name": "roomId",
+              "direction": "asc"
+            },
+            {
+              "name": "createdAt",
+              "direction": "desc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "spins",
+      "description": "每次转盘候选与云端结果",
+      "indexes": [
+        {
+          "name": "room_created",
+          "unique": false,
+          "fields": [
+            {
+              "name": "roomId",
+              "direction": "asc"
+            },
+            {
+              "name": "createdAt",
+              "direction": "desc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "records",
+      "description": "已确认的投喂日记",
+      "indexes": [
+        {
+          "name": "room_eaten",
+          "unique": false,
+          "fields": [
+            {
+              "name": "roomId",
+              "direction": "asc"
+            },
+            {
+              "name": "eatenAt",
+              "direction": "desc"
+            }
+          ]
+        },
+        {
+          "name": "room_decision",
+          "unique": false,
+          "fields": [
+            {
+              "name": "roomId",
+              "direction": "asc"
+            },
+            {
+              "name": "decisionType",
+              "direction": "asc"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
